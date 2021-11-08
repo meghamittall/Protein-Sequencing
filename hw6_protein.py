@@ -60,6 +60,7 @@ def makeCodonDictionary(filename):
         for i in range(len(value)):
             codon = value[i].replace("T", "U")
             codon_amino_dict[codon] = key
+    f.close()
     # print(codon_amino_dict)
     return codon_amino_dict
 
@@ -91,7 +92,23 @@ Parameters: str ; str
 Returns: 2D list of strs
 '''
 def synthesizeProteins(dnaFilename, codonFilename):
-    return
+    dna_str = readFile(dnaFilename)
+    codon_dict = makeCodonDictionary(codonFilename)
+    protein_lst = []
+    unused_base_count=0
+    i = 0
+    while i<len(dna_str):
+        if(dna_str[i:i+3]=="ATG"):
+            rna_lst = dnaToRna(dna_str, i)
+            protiens_lst = generateProtein(rna_lst, codon_dict)
+            protein_lst.append(protiens_lst)
+            # i+=len(protein_lst[-1])*3
+            i = i+(len(protein_lst[-1])*3)
+        else:
+            i = i+1
+            unused_base_count+=1
+    # print("unused_base_count=", unused_base_count)
+    return protein_lst
 
 
 def runWeek1():
@@ -219,14 +236,14 @@ def runFullProgram():
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    # print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
-    # test.week1Tests()
-    # print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
-    # runWeek1()
+    print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
+    test.week1Tests()
+    print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
+    runWeek1()
     # test.testReadFile()
     # test.testDnaToRna()
     # test.testMakeCodonDictionary()
-    test.testGenerateProtein()
+    # test.testGenerateProtein()
     ## Uncomment these for Week 2 ##
     """
     print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
