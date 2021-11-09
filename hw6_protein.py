@@ -246,7 +246,16 @@ Parameters: 2D list of strs ; 2D list of strs
 Returns: list of strs
 '''
 def makeAminoAcidLabels(proteinList1, proteinList2):
-    return
+    combine_p_lst1, combine_p_lst2 = combineProteins(proteinList1), combineProteins(proteinList2)
+    dict1, dict2 =aminoAcidDictionary(combine_p_lst1), aminoAcidDictionary(combine_p_lst2) 
+    labels_lst = []
+    for key in dict1:
+        labels_lst.append(key)
+    for key in dict2:
+        if key not in labels_lst:
+            labels_lst.append(key)
+    # print("aminoacidslist===", sorted(labels_lst))
+    return sorted(labels_lst)
 
 
 '''
@@ -304,10 +313,10 @@ if __name__ == "__main__":
     # test.testGenerateProtein()
     ## Uncomment these for Week 2 ##
     
-    print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
-    test.week2Tests()
-    print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
-    runWeek2()
+    # print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
+    # test.week2Tests()
+    # print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
+    # runWeek2()
     
     # test.testCommonProteins()
     # test.testCombineProteins()
@@ -319,3 +328,4 @@ if __name__ == "__main__":
     print("\n" + "#"*15 + " WEEK 3 OUTPUT " + "#" * 15 + "\n")
     runFullProgram()
     """
+    test.testMakeAminoAcidLabels()
