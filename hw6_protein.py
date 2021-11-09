@@ -286,7 +286,16 @@ Returns: None
 '''
 def createChart(xLabels, freqList1, label1, freqList2, label2, edgeList=None):
     import matplotlib.pyplot as plt
-    return
+    import numpy as np
+    X_axis = np.arange(len(xLabels))
+    print("list of x-axis==", X_axis)
+    plt.bar(X_axis, freqList1,width = -0.4, align="edge", label = label1)
+    plt.bar(X_axis, freqList2, width = 0.4, align="edge", label = label2)
+    plt.xticks(ticks=list(range(len(xLabels))), labels = xLabels)
+    plt.title("Graph of Amino acids and their freq")
+    plt.legend()
+    plt.show()
+    return None
 
 
 '''
@@ -339,4 +348,4 @@ if __name__ == "__main__":
     runFullProgram()
     """
     # test.testMakeAminoAcidLabels()
-    test.testSetupChartData()
+    test.testCreateChart()
