@@ -4,6 +4,7 @@ Name:
 Roll Number:
 """
 
+from typing import List
 import hw6_protein_tests as test
 
 project = "Protein" # don't edit this
@@ -173,7 +174,31 @@ Parameters: 2D list of strs ; 2D list of strs ; float
 Returns: 2D list of values
 '''
 def findAminoAcidDifferences(proteinList1, proteinList2, cutoff):
-    return
+    comb_p1, comb_p2 = combineProteins(proteinList1), combineProteins(proteinList2)
+    amino_dct1, amino_dct2 = aminoAcidDictionary(comb_p1), aminoAcidDictionary(comb_p2)
+    total1, total2= len(comb_p1), len(comb_p2)
+    combined_list = comb_p2+comb_p1
+    x=set(combined_list)
+    l=list(x)
+    final_list=[]
+    for i in l:
+        if (i!="Start" and i!="Stop"):
+            if i in amino_dct1.keys():
+                freq1=amino_dct1[i]/total1
+            else:
+                freq1 =0
+            if i in amino_dct2.keys():
+                freq2=amino_dct2[i]/total2
+            else:
+                freq2=0
+            if abs(freq2-freq1)>=cutoff:
+                temp=[]
+                temp.append(i)
+                temp.append(freq1)
+                temp.append(freq2)
+                final_list.append(temp)
+    print("final_list==", len(final_list))
+    return final_list
 
 
 '''
@@ -269,7 +294,7 @@ if __name__ == "__main__":
     """
     # test.testCommonProteins()
     # test.testCombineProteins()
-    test.testAminoAcidDictionary()
+    test.testFindAminoAcidDifferences()
     ## Uncomment these for Week 3 ##
     """
     print("\n" + "#"*15 + " WEEK 3 TESTS " +  "#" * 16 + "\n")
