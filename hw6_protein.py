@@ -208,7 +208,24 @@ Parameters: 2D list of strs ; 2D list of values
 Returns: None
 '''
 def displayTextResults(commonalities, differences):
-    return
+    print("given list==", differences)
+    temp = []
+    difference = []
+    for i in range(len(commonalities)):
+         for j in range(len(commonalities[i])):
+            if (commonalities[i][j] != "Start" and commonalities[i][j] != "Stop"):
+                temp.append(commonalities[i][j])
+    temp1=sorted(temp)
+    print("The following proteins occured in both DNA sequences:")
+    print(*temp1, sep = "\n")
+    for i in range(len(differences)):
+        difference.append(differences[i][0]+":")
+        difference.append(str(round(differences[i][1]*100, 2))+" in Seq1")
+        difference.append(str(round(differences[i][2]*100, 2))+" in Seq2")
+    print("The following amino acids occurred at very different rates in the two DNA sequences:")
+    print(*difference, sep = "\n")
+
+    
 
 
 def runWeek2():
@@ -286,15 +303,15 @@ if __name__ == "__main__":
     # test.testMakeCodonDictionary()
     # test.testGenerateProtein()
     ## Uncomment these for Week 2 ##
-    """
+    
     print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
     test.week2Tests()
     print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
     runWeek2()
-    """
+    
     # test.testCommonProteins()
     # test.testCombineProteins()
-    test.testFindAminoAcidDifferences()
+    # test.testFindAminoAcidDifferences()
     ## Uncomment these for Week 3 ##
     """
     print("\n" + "#"*15 + " WEEK 3 TESTS " +  "#" * 16 + "\n")
