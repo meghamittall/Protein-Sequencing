@@ -17,7 +17,14 @@ Parameters: str
 Returns: str
 '''
 def readFile(filename):
-    return
+    file1 = open(filename, 'r')
+    lines = file1.readlines()
+    dna_str = ""
+    for line in lines:
+        dna_str += line.strip()
+    file1.close()
+    # print(dna_str)
+    return dna_str
 
 
 '''
@@ -27,7 +34,15 @@ Parameters: str ; int
 Returns: list of strs
 '''
 def dnaToRna(dna, startIndex):
-    return
+    dna = dna.replace("T", "U")
+    rna_lst = []
+    stop_lst = ["UAA", "UAG", "UGA"]
+    for i in range(startIndex, len(dna), 3):
+        rna_lst.append(dna[i:i+3])
+        if dna[i:i+3] in stop_lst:
+            break
+    # print("rna_lst=", rna_lst)
+    return rna_lst
 
 
 '''
@@ -38,7 +53,16 @@ Returns: dict mapping strs to strs
 '''
 def makeCodonDictionary(filename):
     import json
-    return
+    f = open(filename)
+    data_dict = json.load(f)
+    codon_amino_dict = {}
+    for key, value in data_dict.items():
+        for i in range(len(value)):
+            codon = value[i].replace("T", "U")
+            codon_amino_dict[codon] = key
+    f.close()
+    # print(codon_amino_dict)
+    return codon_amino_dict
 
 
 '''
@@ -48,7 +72,17 @@ Parameters: list of strs ; dict mapping strs to strs
 Returns: list of strs
 '''
 def generateProtein(codons, codonD):
-    return
+    protein_lst = []
+    stop_lst = ["UAA", "UAG", "UGA"]
+    for i in range(len(codons)):
+        if codons[i] == "AUG" and len(protein_lst)==0:
+            protein_lst.append("Start")
+            if codons[i] in stop_lst:
+                protein_lst.append("Stop")
+        else:
+            protein_lst.append(codonD[codons[i]])
+    # print("protein_lst=", protein_lst)
+    return protein_lst
 
 
 '''
@@ -58,7 +92,23 @@ Parameters: str ; str
 Returns: 2D list of strs
 '''
 def synthesizeProteins(dnaFilename, codonFilename):
-    return
+    dna_str = readFile(dnaFilename)
+    codon_dict = makeCodonDictionary(codonFilename)
+    protein_lst = []
+    unused_base_count=0
+    i = 0
+    while i<len(dna_str):
+        if(dna_str[i:i+3]=="ATG"):
+            rna_lst = dnaToRna(dna_str, i)
+            protiens_lst = generateProtein(rna_lst, codon_dict)
+            protein_lst.append(protiens_lst)
+            # i+=len(protein_lst[-1])*3
+            i = i+(len(protein_lst[-1])*3)
+        else:
+            i = i+1
+            unused_base_count+=1
+    # print("unused_base_count=", unused_base_count)
+    return protein_lst
 
 
 def runWeek1():
@@ -77,9 +127,14 @@ Parameters: 2D list of strs ; 2D list of strs
 Returns: 2D list of strs
 '''
 def commonProteins(proteinList1, proteinList2):
-    return
-
-
+    common_proteins_lst = []
+    for list1 in proteinList1:
+        for list2 in proteinList2:
+            if list1 == list2:
+                if list1 not in common_proteins_lst:
+                    common_proteins_lst.append(list1)
+    # print("common_proteins_lst==", common_proteins_lst)
+    return common_proteins_lst
 '''
 combineProteins(proteinList)
 #2 [Check6-2]
@@ -87,7 +142,12 @@ Parameters: 2D list of strs
 Returns: list of strs
 '''
 def combineProteins(proteinList):
-    return
+    combine_proteins_lst = []
+    for list in proteinList:
+        for i in range(len(list)):
+            combine_proteins_lst.append(list[i])
+    # print("combine_proteins_lst==", combine_proteins_lst)
+    return combine_proteins_lst
 
 
 '''
@@ -186,11 +246,14 @@ def runFullProgram():
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
-    test.week1Tests()
-    print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
-    runWeek1()
-
+    # print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
+    # test.week1Tests()
+    # print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
+    # runWeek1()
+    # test.testReadFile()
+    # test.testDnaToRna()
+    # test.testMakeCodonDictionary()
+    # test.testGenerateProtein()
     ## Uncomment these for Week 2 ##
     """
     print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
@@ -198,7 +261,8 @@ if __name__ == "__main__":
     print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
     runWeek2()
     """
-
+    # test.testCommonProteins()
+    test.testCombineProteins()
     ## Uncomment these for Week 3 ##
     """
     print("\n" + "#"*15 + " WEEK 3 TESTS " +  "#" * 16 + "\n")
