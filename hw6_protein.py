@@ -284,13 +284,13 @@ createChart(xLabels, freqList1, label1, freqList2, label2, edgeList=None)
 Parameters: list of strs ; list of floats ; str ; list of floats ; str ; [optional] list of strs
 Returns: None
 '''
-def createChart(xLabels, freqList1, label1, freqList2, label2, edgeList):
+def createChart(xLabels, freqList1, label1, freqList2, label2, edgeList=None):
     import matplotlib.pyplot as plt
     import numpy as np
     X_axis = np.arange(len(xLabels))
     plt.bar(X_axis, freqList1,width = -0.4, align="edge", label = label1, edgecolor = edgeList)
     plt.bar(X_axis, freqList2, width = 0.4, align="edge", label = label2, edgecolor = edgeList)
-    plt.xticks(ticks=list(range(len(xLabels))), labels = xLabels)
+    plt.xticks(ticks=list(range(len(xLabels))), labels = xLabels, rotation="vertical")
     plt.title("Graph of Amino acids and their freq")
     plt.legend()
     plt.show()
@@ -326,37 +326,48 @@ Parameters: no parameters
 Returns: None
 '''
 def runFullProgram():
-    return
+    humans_proteins_lst = synthesizeProteins("data\human_p53.txt", "data\codon_table.json")
+    elephants_proteins_lst = synthesizeProteins("data\elephant_p53.txt", "data\codon_table.json")
+    common_protein_lst = commonProteins(humans_proteins_lst, elephants_proteins_lst)
+    differences_lst = findAminoAcidDifferences(humans_proteins_lst, elephants_proteins_lst, 0.005)
+    displayTextResults(common_protein_lst, differences_lst)
+    labels = makeAminoAcidLabels(humans_proteins_lst, elephants_proteins_lst)
+    f1 = setupChartData(labels, humans_proteins_lst)
+    f2 = setupChartData(labels, elephants_proteins_lst)
+    edges = makeEdgeList(labels, differences_lst)
+    # print("edges list====", edges)
+    createChart(labels, f1, "Human", f2, "Elephant", edgeList=edges)
+    return None
 
 
 ### RUN CODE ###
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-    # print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
-    # test.week1Tests()
-    # print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
-    # runWeek1()
+    print("\n" + "#"*15 + " WEEK 1 TESTS " +  "#" * 16 + "\n")
+    test.week1Tests()
+    print("\n" + "#"*15 + " WEEK 1 OUTPUT " + "#" * 15 + "\n")
+    runWeek1()
     # test.testReadFile()
     # test.testDnaToRna()
     # test.testMakeCodonDictionary()
     # test.testGenerateProtein()
     ## Uncomment these for Week 2 ##
     
-    # print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
-    # test.week2Tests()
-    # print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
-    # runWeek2()
+    print("\n" + "#"*15 + " WEEK 2 TESTS " +  "#" * 16 + "\n")
+    test.week2Tests()
+    print("\n" + "#"*15 + " WEEK 2 OUTPUT " + "#" * 15 + "\n")
+    runWeek2()
     
     # test.testCommonProteins()
     # test.testCombineProteins()
     # test.testFindAminoAcidDifferences()
     ## Uncomment these for Week 3 ##
-    """
+    
     print("\n" + "#"*15 + " WEEK 3 TESTS " +  "#" * 16 + "\n")
     test.week3Tests()
     print("\n" + "#"*15 + " WEEK 3 OUTPUT " + "#" * 15 + "\n")
     runFullProgram()
-    """
+
     # test.testMakeAminoAcidLabels()
-    test.testMakeEdgeList()
+    # test.testMakeEdgeList()
